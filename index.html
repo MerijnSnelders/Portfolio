@@ -91,9 +91,14 @@
             font-weight: 500;
         }
 
-        .terminal-buttons { display: flex; gap: 6px; }
+        .terminal-buttons { 
+            display: flex; 
+            gap: 6px; 
+            position: relative;
+            z-index: 10;
+        }
         .terminal-button {
-            width: 12px; height: 12px;
+            width: 18px; height: 18px;
             border-radius: 50%;
             cursor: pointer;
         }
@@ -309,7 +314,7 @@
 <body class="bg-white text-slate-800 antialiased">
 
     <!-- ===== Navigatiebalk ===== -->
-    <header class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm shadow-sm">
+    <header class="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur-sm shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo / Naam --><a href="#home" class="text-2xl font-bold text-blue-600">Merijn Snelders</a>
@@ -969,7 +974,6 @@
             </div>
         </div>
         <div id="terminal-body">
-            <!-- Output wordt hier dynamisch toegevoegd -->
         </div>
         <div id="terminal-input-line">
             <span id="terminal-prompt">$&nbsp;</span>
@@ -1332,69 +1336,130 @@
             const terminalCloseBtn = document.getElementById('terminal-close-btn');
 
             const welcomeMessage = "Welkom bij de terminal van Merijn!";
+
+            // Typtekst regel voor regel (universele functie)
+            async function typeOutput(text, delay = 60) {
+                const lines = text.trim().split('\n');
+                for (const line of lines) {
+                    console.log(line)
+                    appendOutput(line);
+                    await new Promise(r => setTimeout(r, delay));
+                }
+            }
+
             
             // Commando's (Spotify verwijderd)
             const commands = {
-                'help': `
+                'help': async() => {
+                    await typeOutput( `
 Beschikbare commando's:
-  <span class="command-prompt">help</span>         Toont deze help-tekst
-  <span class="command-prompt">overmij</span>      Toont informatie over mij
-  <span class="command-prompt">skills</span>       Toont een lijst van mijn vaardigheden
-  <span class="command-prompt">projecten</span>    Toont mijn projecten
-  <span class="command-prompt">contact</span>      Scrollt naar het contactformulier
-  <span class="command-prompt">open [naam]</span>  Opent een link (bv. 'open linkedin')
-  <span class="command-prompt">ronaldo</span>      Toont een speciale boodschap
-  <span class="command-prompt">clear</span>        Maakt de terminal leeg
-  <span class="command-prompt">sluit</span>        Sluit de terminal
-`,
-                'overmij': "Gepassioneerde Junior Software Developer, gedreven om te leren en te groeien. Mijn focus ligt op het schrijven van kwalitatieve code en het bouwen van functionele en robuuste applicaties die echte problemen oplossen.",
-                'skills': "JavaScript, React, Java, C#, SQL, GitLab & GitHub, HTML, Tailwind CSS",
-                'projecten': `
+  <span class="command-prompt">help</span>         Toont deze help-tekst.
+  <span class="command-prompt">over mij</span>     Toont informatie over mij.
+  <span class="command-prompt">skills</span>       Toont een lijst van mijn vaardigheden.
+  <span class="command-prompt">projects</span>     Toont mijn projecten.
+  <span class="command-prompt">contact</span>      Scrollt naar het contactformulier.
+  <span class="command-prompt">open [naam]</span>  Opent een link (bv. 'open linkedin').
+  <span class="command-prompt">ronaldo</span>      Toont een speciale boodschap.
+  <span class="command-prompt">clear</span>        Maakt de terminal leeg.
+  <span class="command-prompt">close</span>        sluit de terminal.
+  
+`);
+},
+                'over': async () => { 
+                    await typeOutput(`
+Gepassioneerde Junior Software Developer, gedreven om te leren en te groeien. 
+Mijn focus ligt op het schrijven van kwalitatieve code en het bouwen van functionele en robuuste applicaties die echte problemen oplossen.`);
+                },
+                'about': async () => {
+                    await typeOutput(`
+Gepassioneerde Junior Software Developer, gedreven om te leren en te groeien. 
+Mijn focus ligt op het schrijven van kwalitatieve code en het bouwen van functionele en robuuste applicaties die echte problemen oplossen.`);
+                },
+                'skills': async () => {
+                    await typeOutput(`
+JavaScript
+React
+Java
+C#
+SQL
+GitLab
+GitHub
+HTML
+Tailwind CSS`);
+                },
+                'projects': async () => {
+                    await typeOutput(`
 Mijn projecten:
   1. <span class="command-prompt">Hattricket - Voetbal App</span> (typ 'open project-1')
   2. <span class="command-prompt">Siouxy Dashboard</span> (typ 'open project-2')
   3. <span class="command-prompt">SaaS Analytics Dashboard</span> (typ 'open project-3')
-`,
+`);
+                },
                 'contact': () => {
                     const contactSection = document.getElementById('contact');
                     if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
                     return "Scrollen naar contactsectie...";
                 },
-                 'ronaldo' : () =>{
-                     return`
-                             <pre style="font-family: monospace; line-height: 1; font-size: 12px; color: #10b981;">
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⢀⠐⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠨⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠌⠄⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠂⠀⠀⠀⠀⣤⣶⣾⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠐⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⣿⣿⣿⣿⣿⣿⣏⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣿⣿⠃⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⡿⠏⠰⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⣿⣎⠀⠀⠀⠀⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣶⣬⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣶⣿⣿⣿⡿⣟⠛⠏⡟⠿⢻⡟⡻⡿⣿⣿⣿⣷⣦⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣿⣿⡔⣔⣭⣶⣷⣿⣷⣾⣧⣥⣐⣨⣿⣿⣿⣿⣿⣷⡄⠀⠀⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢐⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠋⠉⠉⠉⠛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠄⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡈⡻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀⠀⠄⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣈⣀⠴⠋⢻⣿⠟⠁⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⢠⣿⣿⣿⣿⣿⣿⣿⡿⠉⠻⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣧⡮⠋⠀⠀⠀⠀⢻⣿⣿⣿⣿⣿⣿⣿⡇⢀⣾⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠙⢿⣿⣿⣿⣿⡇⠌⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣏⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⡟⠀⣼⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⢠⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣇⣶⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⣾⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠰⠀⠀⠀⠀⠀⠀⠸⢿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⣼⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣦⠀⠀⠀⠀⠿⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⣼⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠂
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⡷⠀⠄⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣉⠃⢤⣤⣾⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠙⠻⠟⠁⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡍⣿⣿⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡸⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-                            </pre>
-in my mind i am always the best
-                            `;
-                 },
+                'ronaldo': async () => {
+                const ronaldoArt = [
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⢀⠐⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠠⠨⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠌⠄⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠂⠀⠀⠀⠀⣤⣶⣾⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠐⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⣿⣿⣿⣿⣿⣿⣏⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣿⣿⠃⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⡿⠏⠰⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⣿⣎⠀⠀⠀⠀⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣶⣬⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣶⣿⣿⣿⡿⣟⠛⠏⡟⠿⢻⡟⡻⡿⣿⣿⣿⣷⣦⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⣿⣿⣿⡔⣔⣭⣶⣷⣿⣷⣾⣧⣥⣐⣨⣿⣿⣿⣿⣿⣷⡄⠀⠀⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢐⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠋⠉⠉⠉⠛⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠄⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡈⡻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀⠀⠄⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣈⣀⠴⠋⢻⣿⠟⠁⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⢠⣿⣿⣿⣿⣿⣿⣿⡿⠉⠻⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣧⡮⠋⠀⠀⠀⠀⢻⣿⣿⣿⣿⣿⣿⣿⡇⢀⣾⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠙⢿⣿⣿⣿⣿⡇⠌⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣏⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⡟⠀⣼⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⢠⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣇⣶⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⣾⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠰⠀⠀⠀⠀⠀⠀⠸⢿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⣼⣿⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣦⠀⠀⠀⠀⠿⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⣼⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠂",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⡷⠀⠄⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣉⠃⢤⣤⣾⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⠀⠀⠀⠀⠙⠻⠟⠁⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡍⣿⣿⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⢈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡸⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠀⠀",
+                "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+              "",
+              "",
+              "",
+              "",
+                ];
+
+                // Create a container
+                const container = document.createElement('pre');
+                container.style.fontFamily = 'monospace';
+                container.style.lineHeight = '1';
+           //     container.style.fontSize = '12px';
+                container.style.color = '#10b981';
+                terminalBody.appendChild(container);
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+
+                // Type each line with delay
+                for (const line of ronaldoArt) {
+                    container.textContent += line + '\n';
+                    await new Promise(r => setTimeout(r, 60)); // snelheid (ms per regel)
+                    terminalBody.scrollTop = terminalBody.scrollHeight;
+                }
+
+                // Voeg de quote toe na afloop
+                const quote = document.createElement('div');
+                quote.innerHTML = `
+"In my mind, I am always the best" - Ronaldo
+                `;
+                terminalBody.appendChild(quote);
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+                },
                 'open': (arg) => {
                     if (!arg) return "Gebruik: open [naam] (bv. 'open linkedin', 'open project-1')";
                     const linkedinLink = document.getElementById('linkedin-link');
@@ -1426,21 +1491,21 @@ in my mind i am always the best
                     if (terminalBody) terminalBody.innerHTML = '';
                     return ''; 
                 },
-                'sluit': () => {
+                'close': () => {
                     hideTerminal();
                     return "Terminal wordt gesloten...";
                 }
             };
 
             // Terminal openen/sluiten functies (met null checks)
-            function showTerminal() {
+            async function showTerminal() {
                 if (!terminal) return;
                 terminal.classList.add('open');
                 if (terminalInput) terminalInput.focus();
                 // Check if empty using trim() - Robuuster
-                if (terminalBody && terminalBody.innerHTML.trim() === '') { 
+                if (terminalBody.innerHTML.trim() === '') { 
                     appendOutput(welcomeMessage, 'command-output');
-                    appendOutput(commands['help']);
+                    await runCommand('help');
                 }
             }
 
@@ -1456,7 +1521,7 @@ in my mind i am always the best
             }
             
             // Commando uitvoeren
-            function runCommand(command) {
+            async function runCommand(command) {
                 const parts = command.toLowerCase().split(' ').filter(Boolean);
                 const cmd = parts[0];
                 const arg = parts[1];
@@ -1464,8 +1529,15 @@ in my mind i am always the best
                 appendOutput(`<span class="command-prompt">$ </span><span class="user-command">${command}</span>`);
 
                 if (cmd in commands) {
-                    const result = typeof commands[cmd] === 'function' ? commands[cmd](arg) : commands[cmd];
-                    appendOutput(result);
+                    try {
+                        const result = typeof commands[cmd] === 'function'
+                            ? await commands[cmd](arg) // ⬅️ wacht op async functies (zoals 'ronaldo')
+                            : commands[cmd];
+
+                        if (result) appendOutput(result);
+                    } catch (error) {
+                        appendOutput(`<span class="command-error">Error: ${error.message}</span>`);
+                    }
                 } else {
                     appendOutput(`<span class="command-error">Fout: commando '${cmd}' niet gevonden. Typ 'help'.</span>`);
                 }
@@ -1503,54 +1575,70 @@ in my mind i am always the best
                 dragElement(terminal, terminalHeader);
             }
 
-            function dragElement(elmnt, header) {
-                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-                
-                header.onmousedown = dragMouseDown;
+function dragElement(elmnt, header) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    let dragging = false;
 
-                function dragMouseDown(e) {
-                    e = e || window.event;
-                    e.preventDefault();
-                    pos3 = e.clientX;
-                    pos4 = e.clientY;
-                    // Voeg class toe tijdens slepen voor mobile fix
-                    if (elmnt) elmnt.classList.add('dragging'); 
-                    document.onmouseup = closeDragElement;
-                    document.onmousemove = elementDrag;
-                }
+    header.addEventListener("mousedown", dragStart, { passive: false });
+    header.addEventListener("touchstart", dragStart, { passive: false });
 
-                function elementDrag(e) {
-                    e = e || window.event;
-                    e.preventDefault();
-                    pos1 = pos3 - e.clientX;
-                    pos2 = pos4 - e.clientY;
-                    pos3 = e.clientX;
-                    pos4 = e.clientY;
-                    let newTop = elmnt.offsetTop - pos2;
-                    let newLeft = elmnt.offsetLeft - pos1;
-                    
-                    const maxTop = window.innerHeight - elmnt.offsetHeight;
-                    const maxLeft = window.innerWidth - elmnt.offsetWidth;
-                    
-                    if (newTop < 0) newTop = 0;
-                    if (newLeft < 0) newLeft = 0;
-                    if (newTop > maxTop) newTop = maxTop;
-                    if (newLeft > maxLeft) newLeft = maxLeft;
+    function dragStart(e) {
+        e.preventDefault();
+        dragging = true;
 
-                    elmnt.style.top = newTop + "px";
-                    elmnt.style.left = newLeft + "px";
-                    // Verwijder bottom/right alleen als we slepen
-                    elmnt.style.bottom = 'auto'; 
-                    elmnt.style.right = 'auto';
-                }
+        if (e.type === "touchstart") {
+            pos3 = e.touches[0].clientX;
+            pos4 = e.touches[0].clientY;
+            document.addEventListener("touchmove", dragMove, { passive: false });
+            document.addEventListener("touchend", stopDrag, { passive: true });
+        } else {
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.addEventListener("mousemove", dragMove, false);
+            document.addEventListener("mouseup", stopDrag, false);
+        }
 
-                function closeDragElement() {
-                    // Verwijder class na slepen
-                    if (elmnt) elmnt.classList.remove('dragging'); 
-                    document.onmouseup = null;
-                    document.onmousemove = null;
-                }
-            }
+        elmnt.classList.add("dragging");
+    }
+
+    function dragMove(e) {
+        e.preventDefault();
+        const clientX = e.type === "touchmove" ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === "touchmove" ? e.touches[0].clientY : e.clientY;
+
+        pos1 = pos3 - clientX;
+        pos2 = pos4 - clientY;
+        pos3 = clientX;
+        pos4 = clientY;
+
+        let newTop = elmnt.offsetTop - pos2;
+        let newLeft = elmnt.offsetLeft - pos1;
+
+        const maxTop = window.innerHeight - elmnt.offsetHeight;
+        const maxLeft = window.innerWidth - elmnt.offsetWidth;
+
+        if (newTop < 0) newTop = 0;
+        if (newLeft < 0) newLeft = 0;
+        if (newTop > maxTop) newTop = maxTop;
+        if (newLeft > maxLeft) newLeft = maxLeft;
+
+        elmnt.style.top = newTop + "px";
+        elmnt.style.left = newLeft + "px";
+        elmnt.style.bottom = "auto";
+        elmnt.style.right = "auto";
+    }
+
+    function stopDrag() {
+        dragging = false;
+        elmnt.classList.remove("dragging");
+
+        document.removeEventListener("mousemove", dragMove, false);
+        document.removeEventListener("mouseup", stopDrag, false);
+        document.removeEventListener("touchmove", dragMove);
+        document.removeEventListener("touchend", stopDrag);
+    }
+}
+
         });
     </script>
 
