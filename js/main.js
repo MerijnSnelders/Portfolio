@@ -1,5 +1,5 @@
 import { projects, TECH } from './projects.js';
-import { initLang, setLang, getLang, t, onLangChange, copyVariants, skills } from './i18n.js';
+import { initLang, setLang, getLang, t, onLangChange, copy, skills } from './i18n.js';
 import { initTerminal } from './terminal.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -27,28 +27,13 @@ function safePlay(video) {
     if (p) p.catch(() => { /* autoplay can be blocked; the poster stays visible */ });
 }
 
-// ---------- personal copy (two drafts, see i18n.js) ----------
-let variant = 'a';
-try { variant = localStorage.getItem('variant') === 'b' ? 'b' : 'a'; } catch { /* ignore */ }
-const urlVariant = new URLSearchParams(location.search).get('v');
-if (urlVariant === 'a' || urlVariant === 'b') variant = urlVariant;
-
+// ---------- personal copy ----------
 function renderCopy() {
-    const copy = copyVariants[variant][getLang()];
-    $('#hero-lead').textContent = copy.heroLead;
-    $('#about-p1').textContent = copy.aboutP1;
-    $('#about-p2').textContent = copy.aboutP2;
-    $$('#variant-switch [data-variant]').forEach((b) => {
-        const on = b.dataset.variant === variant;
-        b.setAttribute('aria-pressed', String(on));
-        b.classList.toggle('bg-blue-600', on);
-    });
+    const text = copy[getLang()];
+    $('#hero-lead').textContent = text.heroLead;
+    $('#about-p1').textContent = text.aboutP1;
+    $('#about-p2').textContent = text.aboutP2;
 }
-$$('#variant-switch [data-variant]').forEach((b) => b.addEventListener('click', () => {
-    variant = b.dataset.variant;
-    try { localStorage.setItem('variant', variant); } catch { /* ignore */ }
-    renderCopy();
-}));
 
 // ---------- skills ----------
 function renderSkills() {

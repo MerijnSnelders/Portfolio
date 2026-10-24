@@ -164,33 +164,18 @@ export const strings = {
     },
 };
 
-// Personal copy comes in two drafts (A and B) so they can be compared side by side with the
-// temporary switcher in the bottom-left corner (see main.js). Pick one, then delete the other.
-// TODO(merijn): rewrite these in your own words; everything below is a draft built from the projects.
-export const copyVariants = {
-    a: {
-        nl: {
-            heroLead: 'Derdejaars ICT-student aan Fontys in Eindhoven. Ik bouw full-stack webapps met Java, React en C# en ben nu beschikbaar voor een startersfunctie.',
-            aboutP1: 'Ik ben Merijn, derdejaars ICT-student aan Fontys in Eindhoven en woon in Nuenen. Tijdens mijn studie bouwde ik een ticketapp met realtime stoelselectie, een pakketdashboard voor Sioux met OCR en een filmplatform in C#.',
-            aboutP2: 'Ik werk het liefst full-stack: van de database en de API tot de interface. Ik ben nu beschikbaar voor een startersfunctie en praat graag over wat jullie bouwen.',
-        },
-        en: {
-            heroLead: 'Third-year ICT student at Fontys in Eindhoven. I build full-stack web apps with Java, React and C# and I\'m available for a starter position now.',
-            aboutP1: 'I\'m Merijn, a third-year ICT student at Fontys in Eindhoven, living in Nuenen. During my studies I built a ticket app with real-time seat selection, a parcel dashboard for Sioux with OCR and a movie platform in C#.',
-            aboutP2: 'I prefer working full-stack: from the database and the API to the interface. I\'m available for a starter position now and happy to talk about what you\'re building.',
-        },
+// Personal copy for the hero and the about section.
+// TODO(merijn): rewrite these in your own words; they are drafts built from the projects.
+export const copy = {
+    nl: {
+        heroLead: 'Derdejaars ICT-student aan Fontys in Eindhoven. Ik bouw full-stack webapps met Java, React en C# en ben nu beschikbaar voor een startersfunctie.',
+        aboutP1: 'Ik ben Merijn, derdejaars ICT-student aan Fontys in Eindhoven en woon in Nuenen. Tijdens mijn studie bouwde ik een ticketapp met realtime stoelselectie, een pakketdashboard voor Sioux met OCR en een filmplatform in C#.',
+        aboutP2: 'Ik werk het liefst full-stack: van de database en de API tot de interface. Ik ben nu beschikbaar voor een startersfunctie en praat graag over wat jullie bouwen.',
     },
-    b: {
-        nl: {
-            heroLead: 'Ik maak webapps waar je echt iets aan hebt: van een stoelenkaart die live meebeweegt tot een scanner die pakketlabels uitleest.',
-            aboutP1: 'Ik ben Merijn, derdejaars ICT-student aan Fontys en woon in Nuenen. Wat ik het leukst vind is een probleem uitpluizen en er iets van bouwen dat echt werkt, zoals een stoelkeuze die bij iedereen tegelijk meebeweegt.',
-            aboutP2: 'Bij het Sioux-project was ik scrum master en bouwde ik de OCR-scanner voor het pakketdashboard. Ik zoek een startersplek waar ik veel kan leren en meteen kan bijdragen.',
-        },
-        en: {
-            heroLead: 'I build web apps that are actually useful: from a seat map that moves live to a scanner that reads parcel labels.',
-            aboutP1: 'I\'m Merijn, a third-year ICT student at Fontys living in Nuenen. What I enjoy most is digging into a problem and building something that really works, like a seat picker that updates for everyone at once.',
-            aboutP2: 'On the Sioux project I was scrum master and built the OCR scanner for the parcel dashboard. I\'m looking for a starter role where I can learn a lot and contribute right away.',
-        },
+    en: {
+        heroLead: 'Third-year ICT student at Fontys in Eindhoven. I build full-stack web apps with Java, React and C# and I\'m available for a starter position now.',
+        aboutP1: 'I\'m Merijn, a third-year ICT student at Fontys in Eindhoven, living in Nuenen. During my studies I built a ticket app with real-time seat selection, a parcel dashboard for Sioux with OCR and a movie platform in C#.',
+        aboutP2: 'I prefer working full-stack: from the database and the API to the interface. I\'m available for a starter position now and happy to talk about what you\'re building.',
     },
 };
 

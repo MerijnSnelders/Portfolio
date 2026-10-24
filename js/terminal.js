@@ -1,4 +1,4 @@
-import { t, getLang, setLang, onLangChange, copyVariants } from './i18n.js';
+import { t, getLang, setLang, onLangChange, copy } from './i18n.js';
 import { projects } from './projects.js';
 import { ronaldoArt } from './ronaldo.js';
 
@@ -34,7 +34,7 @@ export function initTerminal({ openProject, goTo }) {
 
     // ----- commands -----
     const aboutText = () => {
-        const text = copyVariants.a[getLang()];
+        const text = copy[getLang()];
         return [text.aboutP1, text.aboutP2];
     };
 
