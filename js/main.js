@@ -241,8 +241,6 @@ function renderDetail(id) {
                 ${t('videoFallback')}
             </video>
 
-            ${p.play ? playPanel(p) : ''}
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-14">
                 <div class="md:col-span-2 space-y-4 text-lg text-gray-700 leading-relaxed">
                     ${pick(p.body).map((para) => `<p>${para}</p>`).join('')}
@@ -266,6 +264,8 @@ function renderDetail(id) {
                     </div>
                 </aside>
             </div>
+
+            ${p.play ? playPanel(p) : ''}
 
             <nav class="mt-16 pt-8 border-t border-slate-200 flex justify-between gap-4 text-sm" aria-label="Projects">
                 <a class="text-blue-600 hover:underline" href="#project/${prev.id}">&larr; ${prev.name}</a>
