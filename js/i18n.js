@@ -29,7 +29,7 @@ export const strings = {
         photoAlt: 'Merijn Snelders',
 
         projectsTitle: 'Projecten',
-        projectsIntro: 'Drie projecten waar ik trots op ben. Klik op een scherm voor de details.',
+        projectsIntro: 'Vier projecten waar ik trots op ben. Klik op een scherm voor de details.',
         projectDetails: 'Bekijk projectdetails',
         projectBack: 'Terug naar alle projecten',
         projectRole: 'Mijn rol',
@@ -38,6 +38,12 @@ export const strings = {
         projectPrev: 'Vorig project',
         projectNext: 'Volgend project',
         projectNoLinks: 'Geen openbare code beschikbaar.',
+        projectWith: 'Samen met',
+        playTitle: 'Speel het zelf',
+        playButton: 'Speel in je browser',
+        playHost: 'Het spel draait via itch.io.',
+        playItch: 'Open op itch.io',
+        playTouch: 'Dit spel speel je met een toetsenbord. Open deze pagina op een computer om het hier te spelen, of ga naar itch.io.',
         videoFallback: 'Je browser kan deze video niet afspelen.',
 
         aboutTitle: 'Over mij',
@@ -108,7 +114,7 @@ export const strings = {
         photoAlt: 'Merijn Snelders',
 
         projectsTitle: 'Projects',
-        projectsIntro: 'Three projects I\'m proud of. Click a screen for the details.',
+        projectsIntro: 'Four projects I\'m proud of. Click a screen for the details.',
         projectDetails: 'View project details',
         projectBack: 'Back to all projects',
         projectRole: 'My role',
@@ -117,6 +123,12 @@ export const strings = {
         projectPrev: 'Previous project',
         projectNext: 'Next project',
         projectNoLinks: 'No public code available.',
+        projectWith: 'Together with',
+        playTitle: 'Play it yourself',
+        playButton: 'Play in your browser',
+        playHost: 'The game is hosted on itch.io.',
+        playItch: 'Open on itch.io',
+        playTouch: 'This game is played with a keyboard. Open this page on a computer to play it here, or go to itch.io.',
         videoFallback: 'Your browser can\'t play this video.',
 
         aboutTitle: 'About me',

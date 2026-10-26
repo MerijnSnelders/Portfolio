@@ -60,8 +60,8 @@ function renderProjects() {
 
     const slides = projects.map((p) => `
         <div class="swiper-slide">
-            <div class="mobile-frame">
-                <div class="mobile-notch"></div>
+            <div class="mobile-frame ${p.landscape ? 'landscape' : ''}">
+                ${p.landscape ? '' : '<div class="mobile-notch"></div>'}
                 <div class="mobile-screen" data-open="${p.id}" role="button" tabindex="0" aria-label="${t('projectDetails')}: ${p.name}">
                     <video loop muted playsinline preload="auto" poster="${posterSrc(p.id, 'mobile')}" data-id="${p.id}">
                         <source src="${videoSrc(p.id, 'mobile')}" type="video/mp4">
@@ -183,6 +183,40 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ---------- project detail page ----------
+// Playable embed: only keyboard devices get a Play button, and nothing from itch.io loads until it is clicked.
+const canPlay = () => window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 768px)').matches;
+
+function playPanel(p) {
+    const { play } = p;
+    const host = `<p class="mt-3 text-sm text-gray-500">${t('playHost')} <a class="text-blue-600 hover:underline" href="${play.page}" target="_blank" rel="noopener noreferrer">${t('playItch')}</a></p>`;
+    const body = canPlay()
+        ? `<div class="play-frame" style="aspect-ratio:${play.width} / ${play.height}" data-play-box>
+                <button type="button" class="play-button" data-play-src="${play.src}" style="background-image:linear-gradient(rgba(15,23,42,.55),rgba(15,23,42,.55)),url(${posterSrc(p.id, 'desktop')})">
+                    <span class="play-button-inner">${icon('lucide-play')}<span>${t('playButton')}</span></span>
+                </button>
+            </div>${host}`
+        : `<p class="p-4 rounded-lg bg-slate-50 border border-slate-200 text-gray-700">${t('playTouch')}</p>${host}`;
+    return `<section class="mt-14" aria-label="${t('playTitle')}">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4">${t('playTitle')}</h2>
+        ${body}
+    </section>`;
+}
+
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-play-src]');
+    if (!btn) return;
+    const box = btn.closest('[data-play-box]');
+    const frame = document.createElement('iframe');
+    frame.src = btn.dataset.playSrc;
+    frame.title = 'Game';
+    frame.allow = 'autoplay; fullscreen; gamepad';
+    frame.allowFullscreen = true;
+    frame.setAttribute('scrolling', 'no');
+    frame.className = 'play-iframe';
+    box.replaceChildren(frame);
+    frame.addEventListener('load', () => frame.focus());
+});
+
 function renderDetail(id) {
     const index = projects.findIndex((p) => p.id === id);
     const p = projects[index];
@@ -202,7 +236,7 @@ function renderDetail(id) {
             <h1 class="mt-1 text-4xl md:text-5xl font-extrabold text-slate-900">${p.name}</h1>
             <p class="mt-4 text-xl text-gray-600">${pick(p.tagline)}</p>
 
-            <video id="detail-video" class="detail-video ${mobile ? 'max-w-xs mx-auto block' : ''}" autoplay loop muted playsinline preload="auto" poster="${posterSrc(p.id, kind)}">
+            <video id="detail-video" class="detail-video ${mobile && !p.landscape ? 'max-w-xs mx-auto block' : ''}" autoplay loop muted playsinline preload="auto" poster="${posterSrc(p.id, kind)}">
                 <source src="${videoSrc(p.id, kind)}" type="video/mp4">
                 ${t('videoFallback')}
             </video>
@@ -220,12 +254,18 @@ function renderDetail(id) {
                         <h2 class="text-lg font-semibold text-blue-600 mb-3">${t('projectTech')}</h2>
                         <div class="flex flex-wrap gap-2">${p.tech.map((k) => chip(TECH[k].label, TECH[k].icon)).join('')}</div>
                     </div>
+                    ${p.with?.length ? `<div>
+                        <h2 class="text-lg font-semibold text-blue-600 mb-3">${t('projectWith')}</h2>
+                        ${p.with.map((w) => `<a class="inline-flex items-center gap-2 text-blue-600 hover:underline font-medium" href="${w.href}" target="_blank" rel="noopener noreferrer">${icon('github')} ${w.name}</a>`).join('<br>')}
+                    </div>` : ''}
                     <div>
                         <h2 class="text-lg font-semibold text-blue-600 mb-3">${t('projectLinks')}</h2>
                         ${links}
                     </div>
                 </aside>
             </div>
+
+            ${p.play ? playPanel(p) : ''}
 
             <nav class="mt-16 pt-8 border-t border-slate-200 flex justify-between gap-4 text-sm" aria-label="Projects">
                 <a class="text-blue-600 hover:underline" href="#project/${prev.id}">&larr; ${prev.name}</a>
