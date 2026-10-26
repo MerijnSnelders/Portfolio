@@ -18,6 +18,8 @@ export const TECH = {
     oauth: { label: 'OAuth 2.0' },
     ocr: { label: 'OCR' },
     winforms: { label: 'Windows Forms' },
+    unity: { label: 'Unity', icon: 'unity' },
+    csharpgame: { label: 'C#', icon: 'csharp' },
 };
 
 export const projects = [
@@ -48,6 +50,46 @@ export const projects = [
         links: [
             { label: { nl: 'Backend op GitHub', en: 'Backend on GitHub' }, href: 'https://github.com/MerijnSnelders/hattrickets_backend' },
             { label: { nl: 'Frontend op GitHub', en: 'Frontend on GitHub' }, href: 'https://github.com/MerijnSnelders/hattrickets_frontend' },
+        ],
+    },
+    {
+        id: 'breakingpoint',
+        name: 'BreakingPoint',
+        context: { nl: 'Fontys ICT duo-project', en: 'Fontys ICT duo project' },
+        landscape: true,
+        tagline: {
+            nl: 'Een platformgame die je zo zwaar maakt dat je wilt stoppen. Lukt het toch?',
+            en: 'A platformer built to make you want to quit. Can you finish it anyway?',
+        },
+        summary: {
+            nl: 'Een 2D rage-bait platformer in Unity. Haal het einde van elk level zonder te rage-quitten, en speel hem gewoon in je browser.',
+            en: 'A 2D rage-bait platformer in Unity. Reach the end of every level without rage-quitting, and play it right in your browser.',
+        },
+        body: {
+            nl: [
+                'BreakingPoint is een 2D rage-bait platformer: het doel is het einde van elk level halen zonder te rage-quitten. Het motto van het spel is "als jij stopt, winnen wij". We maakten het met z\'n tweeën in Unity en C#, met meerdere levels, checkpoints, een menu, sounddesign en een trailer.',
+                'Ik maakte de achtergrond, een deel van de levels en de animaties en besturing van het personage. Krasen deed het grootste deel van het leveldesign, het geluid, het menu en de checkpoints.',
+            ],
+            en: [
+                'BreakingPoint is a 2D rage-bait platformer: the goal is to reach the end of each level without rage-quitting. The game\'s motto is "if you quit, we win". We made it as a duo in Unity and C#, with multiple levels, checkpoints, a menu, sound design and a trailer.',
+                'I made the background, part of the levels and the character animations and controls. Krasen did most of the level design, the sound, the menu and the checkpoints.',
+            ],
+        },
+        roles: {
+            nl: ['Achtergrond', 'Animaties en besturing', 'Deel van het leveldesign'],
+            en: ['Background', 'Animations and controls', 'Part of the level design'],
+        },
+        tech: ['unity', 'csharpgame'],
+        with: [{ name: 'krasen67', href: 'https://github.com/krasen67' }],
+        play: {
+            // itch.io blocks hotlinking html-classic.itch.zone directly, so use its official embed route (upload id)
+            src: 'https://itch.io/embed-upload/15536610?color=0f172a',
+            page: 'https://krasen78.itch.io/dungeon-game',
+            width: 1300,
+            height: 740,
+        },
+        links: [
+            { label: { nl: 'Code op GitHub', en: 'Code on GitHub' }, href: 'https://github.com/MerijnSnelders/BreakingPoint' },
         ],
     },
     {
